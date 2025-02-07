@@ -10,9 +10,15 @@ import express from "express";
 // create an express server application:
 const app = express();
 
+// Make the application listen for incoming HTTP requests 
 let server = app.listen(3000, () => {
     console.log('server ready!');
 })
+
+// Handle HTTP requests 
+// When the client sends a request, it has a METHOD and a PATH 
+// METHOD: indicates WHAT the users wants to do. For example, if the user wants to get a webpage, the request will have GET method. If the user wants to create something on the server, the request will have POST method. DELETE method for deleting things on the server, etc.
+// PATH: this is part of the URL that directs the user's request and tells our application how to handle it. 
 
 app.get('/', (req, res)=>{
     res.send(`<h1>Hello Node.js!</h1>
@@ -47,3 +53,18 @@ app.get('/pets/:type', (req,res)=>{
 
     // When a server sends a response,the response includes a status code with a summary of what happened. For example: 200 means OK, 404 means the requested resources not found, 500 means there was a server error, etc. By default, Exrpresses sets the 200 code
 });
+
+// Sending objects in response 
+app.get('/all-pets', (req,res)=>{
+    // send the petTypes object
+    res.json(petTypes);
+    // converts the JavaScript object into the standardized JSON format to send to the client. Also sets headers on the response so that client knows it's geting a JSON object 
+});
+
+// Sending files
+app.get('/pages/home', (req, res) => {
+    res.sendFile('/files/home.html', {root:import.meta.dirname});
+})
+
+// Allowing all files inside the files/ folder to be publicly accessible.
+app.use('/files', express.static("files"));
